@@ -39,7 +39,7 @@ protected: //vars
     AnalyzerChannelData *mLoad;
 
     //MN662785 analysis vars:
-    U64 mCurrentSample;
+    U64 mSampleRateHz;
 
 #pragma warning( pop )
 };

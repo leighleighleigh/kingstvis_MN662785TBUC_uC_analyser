@@ -11,20 +11,20 @@ MN662785AnalyzerSettings::MN662785AnalyzerSettings()
         mClockChannel(UNDEFINED_CHANNEL),
         mLoadChannel(UNDEFINED_CHANNEL)
 {
-    mDataChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
-    mDataChannelInterface->SetTitleAndTooltip("MDATA", "Data Line");
-    mDataChannelInterface->SetChannel(mDataChannel);
-
     mClockChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
     mClockChannelInterface->SetTitleAndTooltip("MCLK", "Clock Line");
     mClockChannelInterface->SetChannel(mClockChannel);
+
+    mDataChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
+    mDataChannelInterface->SetTitleAndTooltip("MDATA", "Data Line");
+    mDataChannelInterface->SetChannel(mDataChannel);
 
     mLoadChannelInterface.reset(new AnalyzerSettingInterfaceChannel());
     mLoadChannelInterface->SetTitleAndTooltip("MLD", "Load Data Line");
     mLoadChannelInterface->SetChannel(mLoadChannel);
 
-    AddInterface(mDataChannelInterface.get());
     AddInterface(mClockChannelInterface.get());
+    AddInterface(mDataChannelInterface.get());
     AddInterface(mLoadChannelInterface.get());
     
     AddExportOption(0, "Export as text/csv file");
@@ -32,8 +32,8 @@ MN662785AnalyzerSettings::MN662785AnalyzerSettings()
     AddExportExtension(0, "CSV file", "csv");
 
     ClearChannels();
-    AddChannel(mDataChannel, "MDATA", false);
     AddChannel(mClockChannel, "MCLK", false);
+    AddChannel(mDataChannel, "MDATA", false);
     AddChannel(mLoadChannel, "MLD", false);
 }
 
