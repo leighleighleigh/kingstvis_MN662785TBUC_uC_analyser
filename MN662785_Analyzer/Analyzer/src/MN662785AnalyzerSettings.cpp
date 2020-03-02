@@ -32,9 +32,9 @@ MN662785AnalyzerSettings::MN662785AnalyzerSettings()
     AddExportExtension(0, "CSV file", "csv");
 
     ClearChannels();
-    AddChannel(mDataChannelInterface, "MDATA", false);
-    AddChannel(mClockChannelInterface, "MCLK", false);
-    AddChannel(mLoadChannelInterface, "MLD", false);
+    AddChannel(mDataChannel, "MDATA", false);
+    AddChannel(mClockChannel, "MCLK", false);
+    AddChannel(mLoadChannel, "MLD", false);
 }
 
 MN662785AnalyzerSettings::~MN662785AnalyzerSettings()

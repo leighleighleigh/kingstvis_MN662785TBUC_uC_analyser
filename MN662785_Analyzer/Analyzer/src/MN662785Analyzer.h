@@ -25,25 +25,21 @@ public:
 #pragma warning( push )
 #pragma warning( disable : 4251 ) //warning C4251: 'MN662785Analyzer::<...>' : class <...> needs to have dll-interface to be used by clients of class
 
-protected: //functions
-    void ComputeSampleOffsets();
+// protected: //functions
+    // void ComputeSampleOffsets();
 
 protected: //vars
     std::auto_ptr< MN662785AnalyzerSettings > mSettings;
     std::auto_ptr< MN662785AnalyzerResults > mResults;
-    AnalyzerChannelData *mMN662785;
-
     MN662785SimulationDataGenerator mSimulationDataGenerator;
     bool mSimulationInitilized;
 
+    AnalyzerChannelData *mData;
+    AnalyzerChannelData *mClock;
+    AnalyzerChannelData *mLoad;
+
     //MN662785 analysis vars:
-    U32 mSampleRateHz;
-    std::vector<U32> mSampleOffsets;
-    U32 mParityBitOffset;
-    U32 mStartOfStopBitOffset;
-    U32 mEndOfStopBitOffset;
-    BitState mBitLow;
-    BitState mBitHigh;
+    U64 mCurrentSample;
 
 #pragma warning( pop )
 };

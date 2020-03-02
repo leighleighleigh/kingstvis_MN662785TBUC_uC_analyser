@@ -4,8 +4,8 @@
 #include <AnalyzerResults.h>
 
 #define FRAMING_ERROR_FLAG ( 1 << 0 )
-#define PARITY_ERROR_FLAG ( 1 << 1 )
-#define MP_MODE_ADDRESS_FLAG ( 1 << 2 )
+// #define PARITY_ERROR_FLAG ( 1 << 1 )
+// #define MP_MODE_ADDRESS_FLAG ( 1 << 2 )
 
 class MN662785Analyzer;
 class MN662785AnalyzerSettings;

@@ -17,13 +17,14 @@ public:
 protected:
     MN662785AnalyzerSettings *mSettings;
     U32 mSimulationSampleRateHz;
-    BitState mBitLow;
-    BitState mBitHigh;
-    U64 mValue;
+    // BitState mBitLow;
+    // BitState mBitHigh;
+    // U64 mValue;
 
 protected: //MN662785 specific
 
-    void CreateMN662785Sequence(U64 value);
+    void WriteMN662785Byte(U8 data);
+    void CreateMN662785Sequence();
     ClockGenerator mClockGenerator;
     SimulationChannelDescriptorGroup mMN662785SimulationChannels;
     SimulationChannelDescriptor *mData;

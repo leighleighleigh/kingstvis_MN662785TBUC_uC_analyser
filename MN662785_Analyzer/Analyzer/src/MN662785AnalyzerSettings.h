@@ -22,9 +22,9 @@ public:
     // bool mUseAutobaud;
 
 protected:
-    std::auto_ptr< AnalyzerSettingInterfaceChannel >    mDataChannelInterface;
-    std::auto_ptr< AnalyzerSettingInterfaceChannel >    mClockChannelInterface;
-    std::auto_ptr< AnalyzerSettingInterfaceChannel >    mLoadChannelInterface;
+    std::auto_ptr<AnalyzerSettingInterfaceChannel> mDataChannelInterface;
+    std::auto_ptr<AnalyzerSettingInterfaceChannel> mClockChannelInterface;
+    std::auto_ptr<AnalyzerSettingInterfaceChannel> mLoadChannelInterface;
     // std::auto_ptr< AnalyzerSettingInterfaceBool >   mUseAutobaudInterface;
 };
 
