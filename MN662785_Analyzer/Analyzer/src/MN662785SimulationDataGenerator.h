@@ -21,15 +21,14 @@ protected:
     BitState mBitHigh;
     U64 mValue;
 
-    U64 mMpModeAddressMask;
-    U64 mMpModeDataMask;
-    U64 mNumBitsMask;
-
 protected: //MN662785 specific
 
-    void CreateMN662785Byte(U64 value);
+    void CreateMN662785Sequence(U64 value);
     ClockGenerator mClockGenerator;
-    SimulationChannelDescriptor mMN662785SimulationData;  //if we had more than one channel to simulate, they would need to be in an array
+    SimulationChannelDescriptorGroup mMN662785SimulationChannels;
+    SimulationChannelDescriptor *mData;
+    SimulationChannelDescriptor *mClock;
+    SimulationChannelDescriptor *mLoad;
 };
 
 #endif //UNIO_SIMULATION_DATA_GENERATOR
