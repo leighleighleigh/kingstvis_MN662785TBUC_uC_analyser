@@ -58,7 +58,15 @@ void MN662785Analyzer::WorkerThread()
 
     // Lets make a frame
     Frame frame;
+    Frame dataFrame;
+
     uint8_t bitCount = 0;
+
+    U64 lastClockHighEdge = 0;
+    U64 bitTimeThresh = 0;
+
+    uint8_t lastData = 0;
+    U64 lastDataEndSample = 0;
 
     // Work through and indicate the rising clock edges, with markers.
     for (;;)
@@ -67,6 +75,7 @@ void MN662785Analyzer::WorkerThread()
 
         if (mClock->GetBitState() == BIT_HIGH)
         {
+
             // Move mData to this position
             mData->AdvanceToAbsPosition(mClock->GetSampleNumber());
             uint8_t dataVal = (mData->GetBitState() == BIT_HIGH) ? 1 : 0;
@@ -87,6 +96,8 @@ void MN662785Analyzer::WorkerThread()
             
             if(bitCount > 1 && bitCount < 8)
             {
+                // Since we know we are in a byte, we can calculate the bittime thresh.
+                bitTimeThresh = mClock->GetSampleNumber() - lastClockHighEdge;
                 frame.mData1 = (frame.mData1 << 1) | dataVal;
             }
 
@@ -94,12 +105,49 @@ void MN662785Analyzer::WorkerThread()
             {
                 frame.mData1 = (frame.mData1 << 1) | dataVal;
                 frame.mEndingSampleInclusive = mClock->GetSampleNumber();
+                // Store temporary variables for MLD info
+                lastData = frame.mData1;
+                lastDataEndSample = frame.mEndingSampleInclusive;
+
                 mResults->AddFrame(frame);
                 mResults->CommitResults();
                 ReportProgress(frame.mEndingSampleInclusive);
 
                 // Reset bit thing
                 bitCount = 0;
+            }
+
+            lastClockHighEdge = mClock->GetSampleNumber();
+        }
+
+        // Find falling edge 
+        if(mClock->GetBitState() == BIT_LOW)
+        {
+            // Check if larger than 6x time bit time 
+            if(mClock->GetSampleNumber() - lastClockHighEdge > 4 * bitTimeThresh)
+            {
+                // Now bring mLoad to last bittime pos, and find next edge.
+                mLoad->AdvanceToAbsPosition(lastDataEndSample);
+                    
+                // We have probably passed MLD. Check if this happened.
+                bool didLoad = mLoad->WouldAdvancingToAbsPositionCauseTransition(mClock->GetSampleNumber());
+                if(didLoad)
+                {
+                    mLoad->AdvanceToNextEdge();
+                    // Add little marker
+                    mResults->AddMarker(mLoad->GetSampleNumber(), AnalyzerResults::MarkerType::Square, mSettings->mLoadChannel);
+
+                    // Make a frame
+                    dataFrame.mStartingSampleInclusive = lastDataEndSample;
+                    dataFrame.mEndingSampleInclusive = mClock->GetSampleNumber();
+                    dataFrame.mData1 = lastData;
+                    dataFrame.mFlags = DISPLAY_AS_WARNING_FLAG;  
+                    dataFrame.mType = 1;
+                    
+                    mResults->AddFrame(dataFrame);
+                    mResults->CommitResults();
+                    ReportProgress(dataFrame.mEndingSampleInclusive);
+                }
             }
         }
 
